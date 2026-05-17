@@ -9,7 +9,7 @@
  */
 
 import type {
-  ZenitelClientOptions,
+  TcivClientOptions,
   DeviceInfo,
   RelayOptions,
   RelayStatus,
@@ -24,7 +24,7 @@ export class TcivClient {
   private readonly authHeader: string;
   private readonly timeout: number;
 
-  constructor(private opts: ZenitelClientOptions) {
+  constructor(private opts: TcivClientOptions) {
     const proto = opts.protocol ?? 'http';
     this.baseUrl = `${proto}://${opts.host}`;
     const user = opts.user ?? 'admin';

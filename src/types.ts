@@ -6,7 +6,7 @@
 
 // ── Client Options ──────────────────────────────────────────────────────────
 
-export interface ZenitelClientOptions {
+export interface TcivClientOptions {
   /** IP or hostname of the Zenitel intercom (e.g. "192.168.1.143") */
   host: string;
   /** Web UI username. Default: "admin" */
@@ -21,7 +21,7 @@ export interface ZenitelClientOptions {
 
 // ── Device Discovery ────────────────────────────────────────────────────────
 
-export interface ZenitelDevice {
+export interface TcivDevice {
   ip: string;
   mac: string;              // "00:13:cb:28:35:ca"
   model?: string;           // "TCIV-2+"

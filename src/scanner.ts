@@ -10,21 +10,21 @@
 import { execFile } from 'node:child_process';
 import { platform } from 'node:os';
 import { networkInterfaces } from 'node:os';
-import type { ZenitelDevice, ScanOptions } from './types.js';
+import type { TcivDevice, ScanOptions } from './types.js';
 import { TcivClient } from './client.js';
 
 const ZENITEL_OUI = '00:13:cb';
 
 // ── Public API ────────────────────────────────────────────────────────────
 
-export async function scanNetwork(opts?: ScanOptions): Promise<ZenitelDevice[]> {
+export async function scanNetwork(opts?: ScanOptions): Promise<TcivDevice[]> {
   const timeout = opts?.timeout ?? 5000;
   const strategies = opts?.strategies ?? ['arp-oui', 'http-probe'];
   const subnet = opts?.subnet ?? detectSubnet();
 
-  const results: Map<string, ZenitelDevice> = new Map();
+  const results: Map<string, TcivDevice> = new Map();
 
-  const tasks: Promise<ZenitelDevice[]>[] = [];
+  const tasks: Promise<TcivDevice[]>[] = [];
 
   if (strategies.includes('arp-oui')) {
     tasks.push(arpOuiScan().catch(() => []));
@@ -51,7 +51,7 @@ export async function scanNetwork(opts?: ScanOptions): Promise<ZenitelDevice[]> 
 
 // ── Strategy A: ARP + OUI ────────────────────────────────────────────────
 
-async function arpOuiScan(): Promise<ZenitelDevice[]> {
+async function arpOuiScan(): Promise<TcivDevice[]> {
   const entries = await getArpTable();
   const zenitels = entries.filter(
     (e) => e.mac.toLowerCase().startsWith(ZENITEL_OUI)
@@ -73,14 +73,14 @@ async function arpOuiScan(): Promise<ZenitelDevice[]> {
           mode: info.mode,
           serialNumber: info.serialNumber,
           hardwareType: info.hardwareType,
-        } satisfies ZenitelDevice;
+        } satisfies TcivDevice;
       } catch {
         // Device unreachable or auth failed — return basic info
         return {
           ip: entry.ip,
           mac: entry.mac,
           hasCamera: false,
-        } satisfies ZenitelDevice;
+        } satisfies TcivDevice;
       }
     })
   );
@@ -156,9 +156,9 @@ async function getArpTable(): Promise<ArpEntry[]> {
 async function httpProbeScan(
   subnet: string,
   timeout: number
-): Promise<ZenitelDevice[]> {
+): Promise<TcivDevice[]> {
   const ips = expandSubnet(subnet);
-  const results: ZenitelDevice[] = [];
+  const results: TcivDevice[] = [];
 
   // Probe all IPs in parallel with short timeout
   const probeTimeout = Math.min(timeout, 1500);
