@@ -226,6 +226,14 @@ async function main() {
       break;
     }
 
+    case 'factory-reset': {
+      const client = getClient();
+      console.log('⚠️  Factory resetting device — all settings will be lost!');
+      await client.factoryReset();
+      console.log('✅ Factory reset sent. Device will reboot with default settings.');
+      break;
+    }
+
     case 'video': {
       const client = getClient();
       console.log(`📷 Video URLs for ${flag('host', 'h')}:\n`);

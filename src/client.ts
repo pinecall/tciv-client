@@ -749,10 +749,19 @@ export class TcivClient {
 
   // ── Reboot ─────────────────────────────────────────────────────────────
 
-  /** Reboot the Zenitel (required after config changes) */
+  /** Reboot the device (required after config changes) */
   async reboot(): Promise<void> {
     try {
       await this._post('/goform/zForm_system_prefs', { reboot: 'Reboot' });
+    } catch {
+      // May disconnect before response — that's expected
+    }
+  }
+
+  /** Factory reset — restores all settings to defaults. Device will reboot. */
+  async factoryReset(): Promise<void> {
+    try {
+      await this._post('/goform/zForm_system_prefs', { factory_reset: 'Factory+Reset' });
     } catch {
       // May disconnect before response — that's expected
     }
