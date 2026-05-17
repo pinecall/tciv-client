@@ -231,17 +231,42 @@ export class TcivClient {
     };
   }
 
-  /** Write SIP config via POST to zForm_save_changes */
+  /**
+   * Write SIP config via POST to zForm_save_changes.
+   * The Zenitel form requires ALL fields to be present — partial submissions are silently ignored.
+   * Submit field is `sipconfig=SAVE` (not signallingMode).
+   */
   async setSIPConfig(config: SIPConfig): Promise<void> {
-    const fields: Record<string, string> = {};
-    if (config.displayName !== undefined) fields.sip_nick = config.displayName;
-    if (config.directoryNumber !== undefined) fields.sip_id = config.directoryNumber;
-    if (config.domain !== undefined) fields.sip_domain = config.domain;
-    if (config.authUsername !== undefined) fields.sip_auth_user = config.authUsername;
-    if (config.authPassword !== undefined) fields.sip_auth_pwd = config.authPassword;
-    if (config.outboundProxy !== undefined) fields.sip_ppa = config.outboundProxy;
-    if (config.transport !== undefined) fields.sip_outbound_transport = config.transport.toUpperCase();
-    fields.save_changes = 'Save';
+    // Read current values first (read-modify-write)
+    const current = await this.getSIPConfig();
+
+    const fields: Record<string, string> = {
+      sip_nick: config.displayName ?? current.displayName ?? '',
+      sip_id: config.directoryNumber ?? current.directoryNumber ?? '',
+      sip_domain: config.domain ?? current.domain ?? '',
+      sip_domain2: config.domain ?? current.domain ?? '',
+      sip_domain3: config.domain ?? current.domain ?? '',
+      registration_method: '0',
+      sip_auth_user: config.authUsername ?? current.authUsername ?? '',
+      sip_auth_pwd: config.authPassword ?? current.authPassword ?? '',
+      register_interval: '100',
+      fail_interval: '60',
+      sip_ppa: config.outboundProxy ?? current.outboundProxy ?? '',
+      sip_ppp: '5060',
+      sip_outbound_proxy_backup_address: '',
+      sip_outbound_proxy_backup_port: '5060',
+      sip_outbound_proxy_backup_address2: '',
+      sip_outbound_proxy_backup_port2: '5060',
+      sip_outbound_transport: (config.transport ?? current.transport ?? 'udp').toUpperCase(),
+      sip_scheme: 'sip',
+      rtp_encryption: 'disabled',
+      srtp_crypto_type: 'AES_CM_128_HMAC_SHA1_80',
+      multicast_relay: '',
+      auto_answer_mode: 'on',
+      auto_resume_call: 'on',
+      mkey_dtmf: 'on',
+      sipconfig: 'SAVE',
+    };
     await this._post('/goform/zForm_save_changes', fields);
   }
 
