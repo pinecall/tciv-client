@@ -758,12 +758,25 @@ export class TcivClient {
     }
   }
 
-  /** Factory reset — restores all settings to defaults. Device will reboot. */
-  async factoryReset(): Promise<void> {
+  /**
+   * Factory reset — restores all settings to defaults. Device will reboot.
+   *
+   * @param mode - Reset mode:
+   *   - 'full'     → Static IP 169.254.1.100 (default)
+   *   - 'dhcp'     → Factory defaults + DHCP enabled
+   *   - 'keep-ip'  → Factory defaults but keep current IP settings
+   */
+  async factoryReset(mode: 'full' | 'dhcp' | 'keep-ip' = 'full'): Promise<void> {
+    const params: Record<string, string> = {
+      'full':    'factory_reset',
+      'dhcp':    'factory_reset_dhcp',
+      'keep-ip': 'factory_reset_keep_ip_settings',
+    };
+    const name = params[mode];
     try {
-      await this._post('/goform/zForm_system_prefs', { factory_reset: 'Factory+Reset' });
+      await this._post('/goform/zForm_send_cmd', { [name]: '1' });
     } catch {
-      // May disconnect before response — that's expected
+      // Device disconnects during reset — expected
     }
   }
 

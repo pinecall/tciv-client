@@ -228,8 +228,10 @@ async function main() {
 
     case 'factory-reset': {
       const client = getClient();
-      console.log('⚠️  Factory resetting device — all settings will be lost!');
-      await client.factoryReset();
+      const mode = hasFlag('keep-ip') ? 'keep-ip' : hasFlag('dhcp') ? 'dhcp' : 'full';
+      const labels = { 'full': 'full (IP → 169.254.1.100)', 'dhcp': 'full + DHCP', 'keep-ip': 'keep IP settings' };
+      console.log(`⚠️  Factory reset (${labels[mode]}) — all settings will be lost!`);
+      await client.factoryReset(mode);
       console.log('✅ Factory reset sent. Device will reboot with default settings.');
       break;
     }
