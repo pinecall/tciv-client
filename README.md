@@ -17,6 +17,7 @@ Zero runtime dependencies · Native `fetch` (Node 18+) · Tested on **TCIV-2+** 
   - [Call & Relay Control](#call-status--relays)
   - [SIP Configuration](#sip-configuration)
   - [Webcall Management](#webcall-api-management)
+  - [Audio Settings](#audio-settings)
   - [Config Backup & Restore](#config-backup--restore)
   - [Call Button (DAK)](#call-button-dak-configuration)
   - [Provisioning](#full-device-provisioning)
@@ -144,6 +145,33 @@ zenitel sip set -h 192.168.1.143 \
 zenitel webcall -h 192.168.1.143           # Check status
 zenitel webcall enable -h 192.168.1.143    # Enable HTTP API
 zenitel webcall disable -h 192.168.1.143   # Disable
+```
+
+### Audio Settings
+
+```bash
+# Read current audio config
+zenitel audio -h 192.168.1.143
+
+# 🎵 Audio settings for 192.168.1.143:
+#
+#   Speaker:     -5 dB  (range: -10 to +13)
+#   Mic:         0 dB   (range: -10 to +10)
+#   AEC:         ✅ ON  (moderate)
+#   ANC:         ✅ ON  (moderate)
+#   DRC:         ❌ OFF (5 dBA)
+#   AVC:         ❌ OFF
+#   FESS:        ❌ OFF (threshold: -60 dBFS)
+#   Mode:        Voice
+
+# Adjust speaker and mic
+zenitel audio set -h 192.168.1.143 --speaker 3 --mic 3
+
+# Toggle DSP features
+zenitel audio set -h 192.168.1.143 --aec-on --drc-on --anc-off
+
+# Backup raw audio config as JSON
+zenitel audio backup -h 192.168.1.143 -o audio-backup.json
 ```
 
 ### Config Backup & Restore
