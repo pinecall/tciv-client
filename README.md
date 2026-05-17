@@ -1,11 +1,13 @@
-# zenitel
+# tciv-client
 
-[![npm](https://img.shields.io/npm/v/zenitel?color=818cf8&label=npm&style=flat-square)](https://www.npmjs.com/package/zenitel)
-[![license](https://img.shields.io/npm/l/zenitel?color=818cf8&style=flat-square)](https://github.com/pinecall/zenitel/blob/master/LICENSE)
+[![npm](https://img.shields.io/npm/v/tciv-client?color=818cf8&label=npm&style=flat-square)](https://www.npmjs.com/package/tciv-client)
+[![license](https://img.shields.io/npm/l/tciv-client?color=818cf8&style=flat-square)](https://github.com/pinecall/tciv-client/blob/master/LICENSE)
 
-> TypeScript client for Zenitel intercom systems — HTTP scraper, network scanner, and CLI.
+> TypeScript HTTP client for TCIV-series intercom systems — device administration, network discovery, and CLI.
 
 Zero runtime dependencies · Native `fetch` (Node 18+) · Tested on **TCIV-2+** firmware **9.2.3.0**
+
+> **Trademark Notice:** This project is **not affiliated with, endorsed by, or sponsored by Zenitel AS.** "Zenitel" and "TCIV" are trademarks of their respective owners. This library is an independent tool for authorized administrators to manage their own intercom systems.
 
 ## Table of Contents
 
@@ -45,13 +47,13 @@ Zero runtime dependencies · Native `fetch` (Node 18+) · Tested on **TCIV-2+** 
 ## Install
 
 ```bash
-npm install zenitel
+npm install tciv-client
 ```
 
 ## Quick Start
 
 ```typescript
-import { ZenitelClient } from 'zenitel';
+import { ZenitelClient } from 'tciv-client';
 
 const z = new ZenitelClient({ host: '192.168.1.143' });
 
@@ -80,7 +82,7 @@ await z.setAudioSettings({ speaker: { gain: 3 } });
 The `zenitel` CLI is included for hardware testing and debugging.
 
 ```bash
-npx zenitel <command> [options]
+npx tciv <command> [options]
 ```
 
 ### Device Discovery
@@ -246,7 +248,7 @@ zenitel reboot -h 192.168.1.143
 ### `ZenitelClient`
 
 ```typescript
-import { ZenitelClient } from 'zenitel';
+import { ZenitelClient } from 'tciv-client';
 
 const z = new ZenitelClient({
   host: '192.168.1.143',
@@ -397,7 +399,7 @@ await z.reboot(); // ~30 seconds offline
 ### `scanNetwork()`
 
 ```typescript
-import { scanNetwork } from 'zenitel';
+import { scanNetwork } from 'tciv-client';
 
 const devices = await scanNetwork({ timeout: 5000 });
 // [{ ip, mac, model, firmware, hasCamera, hostname, mode }]

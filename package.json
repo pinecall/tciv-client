@@ -1,7 +1,7 @@
 {
-  "name": "zenitel",
-  "version": "0.0.3",
-  "description": "HTTP client + network scanner for Zenitel intercom systems (TCIV-2+, TCIV-3). Control relays, SIP configuration, DAK provisioning, webcall, and camera feeds.",
+  "name": "tciv-client",
+  "version": "0.0.1",
+  "description": "HTTP client for TCIV-series intercom systems (TCIV-2+, TCIV-3). Control relays, SIP configuration, DAK provisioning, webcall, audio settings, and camera feeds.",
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -16,7 +16,7 @@
     }
   },
   "bin": {
-    "zenitel": "./dist/cli.js"
+    "tciv": "./dist/cli.js"
   },
   "scripts": {
     "build": "tsc",
@@ -32,17 +32,17 @@
   },
   "files": ["dist", "README.md"],
   "keywords": [
-    "zenitel", "intercom", "TCIV", "SIP", "door-access",
-    "relay", "DTMF", "webcall", "building-automation"
+    "intercom", "TCIV", "SIP", "door-access",
+    "relay", "DTMF", "webcall", "building-automation", "tciv-client"
   ],
   "license": "Apache-2.0",
   "repository": {
     "type": "git",
-    "url": "https://github.com/pinecall/zenitel"
+    "url": "https://github.com/pinecall/tciv-client"
   },
-  "homepage": "https://github.com/pinecall/zenitel#readme",
+  "homepage": "https://github.com/pinecall/tciv-client#readme",
   "bugs": {
-    "url": "https://github.com/pinecall/zenitel/issues"
+    "url": "https://github.com/pinecall/tciv-client/issues"
   },
   "engines": {
     "node": ">=18"
