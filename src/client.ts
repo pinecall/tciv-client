@@ -780,6 +780,59 @@ export class TcivClient {
     }
   }
 
+  // ── Mode (SIP / Edge / ICX-AlphaCom) ───────────────────────────────────
+
+  /**
+   * Get the current device mode.
+   * Returns 'sip', 'dip' (ICX-AlphaCom), 'exc' (Edge), or 'srv' (Edge Controller).
+   */
+  async getMode(): Promise<string> {
+    const info = await this.getDeviceInfo();
+    return info.mode || 'sip';
+  }
+
+  /**
+   * Set device mode. Requires applyChanges() + reboot afterwards.
+   * @param mode - 'sip' | 'dip' (ICX-AlphaCom) | 'exc' (Edge) | 'srv' (Edge Controller)
+   */
+  async setMode(mode: 'sip' | 'dip' | 'exc' | 'srv'): Promise<void> {
+    await this._post('/goform/zForm_save_changes', {
+      sigmode: mode,
+      signallingMode: 'SAVE',
+    });
+  }
+
+  /**
+   * Send APPLY command to trigger reboot after config changes.
+   * The device responds with "System is rebooting..." and goes offline.
+   */
+  async applyChanges(): Promise<void> {
+    try {
+      await this._fetch('/goform/zForm_send_cmd?message=APPLY', 'GET', 5000);
+    } catch {
+      // Device disconnects during reboot — expected
+    }
+  }
+
+  // ── Wait for reboot ────────────────────────────────────────────────────
+
+  /**
+   * Poll the device until it comes back online after a reboot.
+   * @param timeoutMs - Max wait time (default 60s)
+   * @param intervalMs - Poll interval (default 3s)
+   * @returns true if device came back, false if timeout
+   */
+  async waitForReboot(timeoutMs = 60000, intervalMs = 3000): Promise<boolean> {
+    const start = Date.now();
+    // Wait a bit for device to actually go offline first
+    await new Promise(r => setTimeout(r, 5000));
+    while (Date.now() - start < timeoutMs) {
+      if (await this.isReachable()) return true;
+      await new Promise(r => setTimeout(r, intervalMs));
+    }
+    return false;
+  }
+
   // ── Internal helpers ────────────────────────────────────────────────────
 
   private async _fetch(
