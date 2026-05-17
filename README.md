@@ -1,7 +1,7 @@
-# zenitel-client
+# zenitel
 
 [![npm](https://img.shields.io/npm/v/zenitel?color=818cf8&label=npm&style=flat-square)](https://www.npmjs.com/package/zenitel)
-[![license](https://img.shields.io/npm/l/zenitel?color=818cf8&style=flat-square)](https://github.com/pinecall/zenitel-client/blob/master/LICENSE)
+[![license](https://img.shields.io/npm/l/zenitel?color=818cf8&style=flat-square)](https://github.com/pinecall/zenitel/blob/master/LICENSE)
 
 > TypeScript client for Zenitel intercom systems — HTTP scraper, network scanner, and CLI.
 
